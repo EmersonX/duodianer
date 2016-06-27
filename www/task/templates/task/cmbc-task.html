@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+{% load staticfiles %}
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head><title>
+	申请信用卡
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link type="text/css" href="{% static "red.css" %}" rel="stylesheet" />
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+</head>
+<body>
+    <input id="version" type="hidden" value="" />
+    <input type="hidden" id="needTitle" value="true" />
+
+    <header id="nav">
+    <input type="hidden" id="mPlusRtnUrl" value="?EncryptClientNo=" />
+        <div  class="nav_in">
+            <section id="headnav">
+
+            </section>
+            <section>
+                <span>申请信用卡</span>
+            </section>
+
+            <section>
+                <div class="rightLogoIcon"></div>
+            </section>
+
+        </div>
+     </header>
+
+
+<form name="aspnetForm" method="post" action="cmbc-task" id="aspnetForm">
+
+
+<section class="consection" id="secBaseInfo">
+    {% csrf_token %}
+    <div class="incondiv cardid" id="divName">
+        <span><i>* </i>姓名：</span>
+        <div> <input name="user" type="text" id="ctl00_ContentPlaceHolder1_txbName" maxlength="12" oninput="javascript:onChangeInput(this)" onblur="javascript:onTextBlur(this)" /><dt class="index-cross" id="cross_Name" onmousedown = "onTextClear(this)"  ></dt></div>
+    </div>
+    <div class="incondiv cardid">
+        <span><i>* </i>身份证号：</span>
+        <div> <input name="identity" type="text" id="ctl00_ContentPlaceHolder1_txbCardId" maxlength="18" autocomplete="off" oninput="javascript:onChangeInput(this)" onblur="javascript:onTextBlur(this)" " /> <dt class="index-cross" id="cross_ID" onmousedown = "onTextClear(this)"  ></dt></div>
+    </div>
+    <div class="incondiv cardid" id="NotNewDiv" style="display:none;">
+        <div class="conmsg" id="topconmsg"><em>!</em>抱歉，您是已持卡客户，暂不能通过手机申请，请使用电脑登陆我行官网办理。</div>
+    </div>
+    <div class="incondiv cardid">
+        <span><i>* </i>手机号：</span>
+        <div> <input name="phone_number" type="text" id="ctl00_ContentPlaceHolder1_tbxMobile" maxlength="11" pattern="[0-9]*" oninput="javascript:onChangeInput(this)" onblur="javascript:onTextBlur(this)"" /> <dt class="index-cross" id="cross_Tel" onmousedown = "onTextClear(this)"  ></dt></div>
+    </div>
+    <div class="incondiv cardtype">
+        <span><i>* </i>单位所在城区：</span>
+        <div>
+            <select name="province" style="color:#999;">
+                <option value="">省份</option>
+                {% for item in provinces %}
+                    <option value="{{ item.name }}" data-provinceid="{{item.id}}">{{item.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="incondiv cardtype">
+        <span style="color:#FFF;"><i style="color:#FFF;">* </i>单位所在城区：</span>
+        <div>
+            <select id="selcity" name="city" class="dynamic" style="color:#999;">
+                <option value="">城市</option>
+            </select>
+        </div>
+    </div>
+    <div class="incondiv cardtype">
+        <span style="color:#FFF;"><i style="color:#FFF;">* </i>单位所在城区：</span>
+        <div>
+            <select id="selqu" name="district" class="dynamic" style="color:#999;">
+                <option value="">区</option>
+            </select>
+        </div>
+    </div>
+    <div class="incondiv cardid" id="haskadiv" style="display:none;">
+        <div class="conmsg"><em>!</em>抱歉，该区域未开通上门办卡服务，请前往我行网点尝试办理。</div>
+    </div>
+    </section>
+    <div id="ctl00_ContentPlaceHolder1_recInput" >
+    <p class="abtitle" id="pusertitle">请继续填写以下信息，以便您完成申请。</p>
+    <section class="consection" id="sectop" >
+    <div class="incondiv cardid">
+        <span><i>* </i>单位详细地址：</span>
+        <div> <input name="address" type="text" id="ctl00_ContentPlaceHolder1_tbxAddrOther" maxlength="24" oninput="javascript:onChangeInput(this)" onblur="javascript:onTextBlur(this)" /><dt class="index-cross" id="cross_Detail" onmousedown = "onTextClear(this)"  ></dt> </div>
+    </div>
+    <div class="incondiv cardid">
+        <span><i>* </i>单位名称：</span>
+        <div> <input name="company_name" type="text" id="ctl00_ContentPlaceHolder1_tbxUnitName" placeholder="非在职人员暂不受理" maxlength="24" oninput="javascript:onChangeInput(this)" onblur="javascript:onTextBlur(this)" /><dt class="index-cross" id="cross_Work" onmousedown = "onTextClear(this)"  ></dt> </div>
+    </div>
+    <div class="incondiv cardtype">
+        <span><i>* </i>学历：</span>
+        <div>
+            <select name="education" id="ctl00_ContentPlaceHolder1_seledu" style="color:#999; background-color:Transparent;">
+	<option selected="selected" value="0">请选择</option>
+	<option value="college_degree">大专</option>
+	<option value="bachelor_degree">本科</option>
+	<option value="master_degree">硕士</option>
+	<option value="doctoral_degree">博士及以上</option>
+	<option value="high_school_education">高中、中专及技校</option>
+	<option value="junior_high_school_education">初中及以下</option>
+</select>
+        </div>
+    </div>
+    <div class="incondiv cardtype">
+        <span><i>* </i>职务：</span>
+        <div>
+            <select name="title" id="ctl00_ContentPlaceHolder1_selDuty" style="color:#999; background-color:Transparent;">
+	<option selected="selected" value="">请选择</option>
+	<option value="manager">管理人员</option>
+	<option value="employee">一般员工</option>
+	<option value="office_staff">内勤</option>
+	<option value="logistics">后勤</option>
+	<option value="worker">工人</option>
+	<option value="sales">销售/中介/业务代表</option>
+	<option value="waiter">营业员/服务员</option>
+	<option value="individual">个体工商户</option>
+	<option value="farm_worker">农畜牧业从业者</option>
+</select>
+        </div>
+    </div>
+    <div class="incondiv cardtype">
+        <i style="color:#FFF;">* </i>验证码：</label>{{form.captcha}}
+    </div>
+</section>
+<section class="newapplybtn" style="margin-top:10px;">
+    <div class="bottombtn">
+        <div><input type="submit" name="ctl00$ContentPlaceHolder1$btnQuery" value="提交" onclick="javascript:return ChecePage();" id="ctl00_ContentPlaceHolder1_btnQuery" /></div>
+    </div>
+</section>
+</div>
+<div class="conmsg" id="errmsg" style="display:none;"><em>!</em></div>
+
+    <script type="text/javascript">
+    //检验短表单
+    function CheckShort_()
+    {
+        try {
+            if (typeof (EventTrack) == "function") EventTrack('/mca/CCA_Submit_btn.htm', '新户申请提交按钮');
+            if ("1" == $("hidisNew").value) {
+                Disabledbtn(); $("NotNewDiv").style.display = "-webkit-box";
+                if(""==""){ $("topconmsg").innerHTML = "<em>!</em>抱歉，您是已持卡客户，暂不能通过手机申请，请使用电脑登陆我行官网办理。"; }
+                else{ $("topconmsg").innerHTML = "<em>!</em>您已持有招行信用卡，无法参加推荐新户办卡活动；若您想加办卡片，请使用电脑登陆我行官网办理。"; }
+                return false;
+            }
+            var rtnobj = pChkUserName($("ctl00_ContentPlaceHolder1_txbName").value, 2, 6);
+            if (rtnobj.nRet != 1) { ShowErrmsg("请准确输入姓名，2-6个字。"); $("ctl00_ContentPlaceHolder1_txbName").style.border="solid 1px #E7333F"; return false; }
+            else{ $("ctl00_ContentPlaceHolder1_txbName").style.border="";}
+
+            if($("ctl00_ContentPlaceHolder1_txbCardId").value.length == 18 && $("ctl00_ContentPlaceHolder1_txbCardId").value.substr(10,4) == "****"){}
+            else
+            {
+                rtnobj = pSimpleChkUserCardID($("ctl00_ContentPlaceHolder1_txbCardId").value);
+                if (rtnobj.nRet != 1) { ShowErrmsg("请准确输入18位身份证号码。"); $("ctl00_ContentPlaceHolder1_txbCardId").style.border="solid 1px #E7333F"; return false; }else{ $("ctl00_ContentPlaceHolder1_txbCardId").style.border="";}
+                rtnobj = pCheckAge($("ctl00_ContentPlaceHolder1_txbCardId").value);
+                if (rtnobj.nRet != 1) { ShowErrmsg("目前只接受18-60周岁人士通过身份证提出的申请"); $("ctl00_ContentPlaceHolder1_txbCardId").style.border="solid 1px #E7333F"; return false; }else{ $("ctl00_ContentPlaceHolder1_txbCardId").style.border="";}
+            }
+
+            rtnobj = pChkMobile($("ctl00_ContentPlaceHolder1_tbxMobile").value);
+            if (rtnobj.nRet != 1) { ShowErrmsg("请准确输入11位手机号码。"); $("ctl00_ContentPlaceHolder1_tbxMobile").style.border="solid 1px #E7333F";return false; }
+            else{ $("ctl00_ContentPlaceHolder1_tbxMobile").style.border="";}
+
+            $("ctl00_ContentPlaceHolder1_hidpro").value = $("selpro").value;
+            $("ctl00_ContentPlaceHolder1_hidcity").value = $("selcity").value;
+            $("ctl00_ContentPlaceHolder1_hidqu").value = $("selqu").value;
+            $("ctl00_ContentPlaceHolder1_hidhaskabu").value = $("temphaskabu").value;
+            if ("" == $("selcity").value) { ShowErrmsg("请选择你所在城市"); return false; }
+            if ($("selqu").options.length > 0 && "" == $("selqu").value) { ShowErrmsg("请选择你所在城市的区"); return false; }
+            if (!bbtn.checkagree) { ShowErrmsg("请确认领用合约。"); return false; }
+
+            $("ctl00_ContentPlaceHolder1_hidc").value = BCore.tools.Tools.getCookie('bfd_g');
+            sleep(200);
+            return true;
+            }catch(exc){ }
+
+    }
+    function ShowErrmsg(errmsg) {
+        $("errmsg").innerHTML = "<em>!</em>" + errmsg;
+        $("errmsg").style.display = "block";
+    }
+    function successQueryOldNew() {
+        if (0 == ajax.rtncode) {
+            var data = ajax.rtnmsg, bshortcid = 15 == $("ctl00_ContentPlaceHolder1_txbCardId").value.length, bisnew = "Y" == data.IsNew, bisstuold = "Y" == data.IsStuOld;
+            var btotal = !bisnew || bshortcid, bcon = bisnew && bshortcid;    //显示错误语句，已持卡或15位身份证
+            $("NotNewDiv").style.display = (btotal && !bisstuold) ? "-webkit-box" : "none";
+            $("hidisNew").value = (bisnew || bisstuold) ? "0" : "1";   //用于允许申请
+            (!btotal || bisstuold) ? Enabledbbtn() : Disabledbbtn();
+            var orn = ""=="" ? "<em>!</em>抱歉，您是已持卡客户，暂不能通过手机申请，请使用电脑登陆我行官网办理。" : "<em>!</em>您已持有招行信用卡，无法参加推荐新户办卡活动；若您想加办卡片，请使用电脑登陆我行官网办理。";
+            $("topconmsg").innerHTML = bcon ? "<em>!</em>请使用第二代身份证号码进行申请。" : orn;
+        }
+    }
+    function successSMSCode() {
+        if (0 == ajax.rtncode) {
+            var lefttime = 60;
+            btnSMS.disabled = true;
+            btnSMS.style.color = "#858689";
+            btnSMS.value = "重新获取(60)";
+            var btntextchange = setInterval(function() {
+                lefttime--;
+                btnSMS.value = "重新获取(" + lefttime + ")";
+
+                if (0 == lefttime) {
+                    btnSMS.value = "重新获取";
+                    btnSMS.disabled = false;
+                    btnSMS.onclick = SMSCodeCheck;
+                    clearInterval(btntextchange);
+                }
+            }, 1000);
+        }
+        else {
+            btnSMS.onclick = SMSCodeCheck;
+            ShowErrmsg(ajax.rtnmsg);
+        }
+    }
+  $(function(){
+        //一地区选择
+        $('body').on('change', 'select[name="province"]', function(){
+            var select = $(this);
+            $('#selcity').each(function(e){
+                $(this).children('option:not(:first-child)').each(function(){
+                    // reset level 2-3
+                    $(this).remove();
+                })
+            });
+            $('#selqu').each(function(e){
+                $(this).children('option:not(:first-child)').each(function(){
+                    // reset level 2-3
+                    $(this).remove();
+                })
+            });
+            var pid = $(this).find('option:selected').data('provinceid');
+            if (pid>0) {
+                $.ajax({
+                    type: "GET",
+                    url: '{% url 'get_districts_info' %}',
+                    data: {
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                        upid: pid
+                    },
+                    dataType: "JSON",
+                    success: function(data) {
+                        var html = '';
+                        for(var i = 0; i<data.length ; i++){
+                            html +='<option value="'+data[i].name+'" data-cityid="'+data[i].id+'" >'+data[i].name+'</option>' ;
+                        }
+                        $('select[name="city"]').append(html);
+                    }
+                });
+            }
+        });
+
+        // 二级
+        $('body').on('change', 'select[name="city"]', function(e){
+            select = $(this)
+            $('#selqu').each(function(e){
+                 $(this).children('option:not(:first-child)').each(function(){
+                    // reset level 3
+                    $(this).remove();
+                })
+            });
+            var cid = $(this).find('option:selected').data('cityid')
+            if (cid>0) {
+                $.ajax({
+                    type: "GET",
+                    url: '{% url 'get_districts_info' %}',
+                    data: {
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                        upid: cid
+                    },
+                    dataType: "JSON",
+                    success: function(data) {
+                        var html = '';
+                        for(var i = 0; i<data.length ; i++){
+                            html +='<option value="'+data[i].name+'" data-districtid="'+data[i].id+'" >'+data[i].name+'</option>' ;
+                        }
+                        $('select[name="district"]').append(html);
+                    }
+                });
+            }
+        });
+
+
+    // ajax 刷新
+    $('.captcha').click(function(){
+         $.getJSON("/captcha/refresh/",
+                  function(result){
+             $('.captcha').attr('src', result['image_url']);
+             $('#id_captcha_0').val(result['key'])
+          });
+    });
+
+    // ajax动态验证
+    $('#id_captcha_1').blur(function(){  // #id_captcha_1为输入框的id，当该输入框失去焦点是触发函数
+        json_data={
+            'response':$('#id_captcha_1').val(),  // 获取输入框和隐藏字段id_captcha_0的数值
+            'hashkey':$('#id_captcha_0').val()
+        }
+        $.getJSON("{% url 'ajax_val' %}", json_data, function(data){ //ajax发送
+            $('#captcha_status').remove()
+            if(data['status']){ //status返回1为验证码正确， status返回0为验证码错误， 在输入框的后面写入提示信息
+                $('#id_captcha_1').after('<span id="captcha_status" style="color:blue">*验证码正确</span>')
+            }else{
+                 $('#id_captcha_1').after('<span id="captcha_status" style="color:red">*验证码错误</span>')
+            }
+        });
+
+    });
+  });
+
+
+    </script>
+</body>
+</html>
