@@ -6,7 +6,7 @@
 # https://github.com/sequelpro/sequelpro
 #
 # Host: 127.0.0.1 (MySQL 5.6.24)
-# Database: persona
+# Database: py_duodian
 # Generation Time: 2016-06-26 05:37:51 +0000
 # ************************************************************
 
@@ -20,25 +20,25 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
-# Dump of table persona_common_district
+# Dump of table task_common_district
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `persona_common_district`;
+DROP TABLE IF EXISTS `task_common_district`;
 
-CREATE TABLE `persona_common_district` (
+CREATE TABLE `task_common_district` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `level` smallint(6) NOT NULL,
   `upid` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `persona_common_district_c9e9a848` (`level`),
-  KEY `persona_common_district_d50a5dd9` (`upid`)
+  KEY `task_common_district_c9e9a848` (`level`),
+  KEY `task_common_district_d50a5dd9` (`upid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `persona_common_district` WRITE;
-/*!40000 ALTER TABLE `persona_common_district` DISABLE KEYS */;
+LOCK TABLES `task_common_district` WRITE;
+/*!40000 ALTER TABLE `task_common_district` DISABLE KEYS */;
 
-INSERT INTO `persona_common_district` (`id`, `name`, `level`, `upid`)
+INSERT INTO `task_common_district` (`id`, `name`, `level`, `upid`)
 VALUES
 	(1,'北京市',1,0),
 	(2,'天津市',1,0),
@@ -1843,7 +1843,7 @@ VALUES
 	(1801,'绥化市北林区',3,141),
 	(1802,'绥棱县',3,141);
 
-/*!40000 ALTER TABLE `persona_common_district` ENABLE KEYS */;
+/*!40000 ALTER TABLE `task_common_district` ENABLE KEYS */;
 UNLOCK TABLES;
 
 

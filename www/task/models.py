@@ -15,10 +15,10 @@ class CMBCTaskModel(models.Model):
     phone_number = models.CharField(verbose_name="手机号", max_length=16)
     address = models.CharField(verbose_name="单位详细地址", max_length=256)
     company_name =models.CharField(verbose_name="单位名称", max_length=256)
-    education = models.CharField(verbose_name="学历", choices=CMBC_TASK_EDUCATION.iteritems(), max_length=64)
-    title = models.CharField(verbose_name="职务", choices=CMBC_TASK_TITLE.iteritems(), max_length=64)
+    education = models.CharField(verbose_name="学历", default=None, choices=CMBC_TASK_EDUCATION.iteritems(), max_length=64, blank=True)
+    title = models.CharField(verbose_name="职务", default=None, choices=CMBC_TASK_TITLE.iteritems(), max_length=64, blank=True)
 
-    ip = models.CharField(verbose_name="来源IP", editable=False, max_length=32)
+    ip = models.CharField(verbose_name="来源IP", editable=False, max_length=32, blank=True)
     created = models.DateTimeField(verbose_name="添加时间", editable=False)
 
     def __unicode__(self):
@@ -31,9 +31,12 @@ class CMBCTaskModel(models.Model):
         return super(CMBCTaskModel, self).save(*args, **kwargs)
 
     def to_dict(self):
+        title = CMBC_TASK_TITLE[self.title] if self.title else self.title
+        education = CMBC_TASK_EDUCATION[self.education] if self.company_name else self.company_name
+
         return dict(user=self.user, province=self.province, city=self.city, district=self.district, identity=self.identity,
                     phone_number=self.phone_number, address=self.address, company_name=self.company_name,
-                    education=self.education, title=self.title, ip=self.ip, created=self.created)
+                    education=education, title=title, ip=self.ip, created=self.created)
 
     class Meta:
         db_table = 'task_cmbc_task'

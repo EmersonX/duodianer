@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'task',
-    'captcha'
+    'captcha',
+    'daterange_filter'
 ]
 
 MIDDLEWARE_CLASSES = [

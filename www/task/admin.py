@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 from django.contrib import admin
+from daterange_filter.filter import DateRangeFilter
+
 
 from .models import CMBCTaskModel
 from utils.helper import DataDumper, transfer_file
@@ -28,6 +30,7 @@ class CMBCTaskAdmin(admin.ModelAdmin):
     list_display = ['user', 'province', 'city', 'district', 'identity', 'phone_number', 'address',
                     'company_name', 'education', 'title', 'ip', 'created']
     actions = [download_selected_tasks, ]
+    list_filter = [('created', DateRangeFilter)]
 
 
 admin.site.register(CMBCTaskModel, CMBCTaskAdmin)
