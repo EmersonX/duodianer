@@ -3,7 +3,7 @@ from django.contrib import admin
 from daterange_filter.filter import DateRangeFilter
 
 
-from .models import CMBCTaskModel
+from .models import CMBCTaskModel, CEBBANKTaskModel
 from utils.helper import DataDumper, transfer_file
 
 
@@ -32,5 +32,28 @@ class CMBCTaskAdmin(admin.ModelAdmin):
     actions = [download_selected_tasks, ]
     list_filter = [('created', DateRangeFilter)]
 
+class CEBBANKAdmin(admin.ModelAdmin):
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def download_selected_tasks(self, request, queryset):
+        """下载选中的任务并导出到CSV中"""
+        data = []
+        for item in queryset:
+            data.append(item.to_dict())
+        fields_name = ['user', 'phone_number', 'ip', 'created']
+        fields_title = ['姓名', '手机号', '来源IP', '添加时间']
+        dumper = DataDumper(data, field_names=fields_name, field_title=fields_title, sorted_by='created', reverse=True)
+        file_path = dumper.to_csv()
+
+        return transfer_file(file_path)
+
+    download_selected_tasks.short_description = "下载所选的 招行信用卡注册任务"
+
+    list_display = ['user', 'phone_number', 'ip', 'created']
+    actions = [download_selected_tasks, ]
+    list_filter = [('created', DateRangeFilter)]
+
 
 admin.site.register(CMBCTaskModel, CMBCTaskAdmin)
+admin.site.register(CEBBANKTaskModel, CEBBANKAdmin)

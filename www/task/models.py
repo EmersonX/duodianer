@@ -45,6 +45,33 @@ class CMBCTaskModel(models.Model):
         ordering = ['-created']
 
 
+class CEBBANKTaskModel(models.Model):
+    user = models.CharField(verbose_name="姓名", max_length=64)
+    phone_number = models.CharField(verbose_name="手机号", max_length=16)
+
+    ip = models.CharField(verbose_name="来源IP", editable=False, max_length=32, blank=True)
+    created = models.DateTimeField(verbose_name="添加时间", editable=False)
+
+    def __unicode__(self):
+        return self.user
+
+    def save(self, *args, **kwargs):
+        if not self.created:
+            self.created = timezone.now()
+        self.updated = timezone.now()
+        return super(CEBBANKTaskModel, self).save(*args, **kwargs)
+
+    def to_dict(self):
+
+        return dict(user=self.user, phone_number=self.phone_number, ip=self.ip, created=self.created)
+
+    class Meta:
+        db_table = 'task_cebbank_task'
+        verbose_name = '光大信用卡注册任务'
+        verbose_name_plural = '光大信用卡注册任务'
+        ordering = ['-created']
+
+
 class CommonDistrictModel(models.Model):
     id = models.AutoField(verbose_name='ID', primary_key=True)
     name = models.CharField(verbose_name="名称", max_length=255)

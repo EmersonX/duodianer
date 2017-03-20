@@ -6,10 +6,10 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from captcha.models import CaptchaStore
 
-from .forms import CMBCTaskForm
+from .forms import CMBCTaskForm, CEBBANKTaskForm
 from .models import CommonDistrictModel
 from utils.helper import get_client_ip
-from www.settings.const import CMBC_TASK_REDIRECT_URL
+from www.settings.const import CMBC_TASK_REDIRECT_URL, CEBBANK_TASK_REDIRECT_URL
 
 def cmbc_task(request):
     if request.method == "POST":
@@ -26,6 +26,23 @@ def cmbc_task(request):
     provinces = CommonDistrictModel.get_districts_by_upid(0)
     return render_to_response('task/cmbc-task.html',
                               context_instance=RequestContext(request, dict_={'provinces': provinces, 'form': form}))
+
+
+def cebbank_task(request):
+    if request.method == "POST":
+        form = CEBBANKTaskForm(request.POST)
+        if form.is_valid():
+            ip = get_client_ip(request)
+            form.instance.ip = ip
+            form.save()
+            return HttpResponseRedirect(CEBBANK_TASK_REDIRECT_URL)
+        else:
+            print form.errors
+
+    form = CEBBANKTaskForm()
+    return render_to_response('task/cebbank-task.html',
+                              context_instance=RequestContext(request, dict_={'form': form}))
+
 
 def get_districts_info(request):
     """
