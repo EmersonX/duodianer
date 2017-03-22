@@ -6,6 +6,9 @@ from daterange_filter.filter import DateRangeFilter
 from .models import CMBCTaskModel, CEBBANKTaskModel, CMBCSource1TaskModel, CMBCSource2TaskModel
 from utils.helper import DataDumper, transfer_file
 
+from django.conf import settings
+
+admin.site.site_header = settings.ADMIN_SITE_HEADER
 
 class CMBCTaskAdmin(admin.ModelAdmin):
 

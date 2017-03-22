@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ADMIN_SITE_HEADER = "多点儿任务后台"
 
 # Application definition
 
