@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+{% load staticfiles %}
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head><title>
+	申请信用卡
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link type="text/css" href="{% static "red.css" %}" rel="stylesheet" />
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+</head>
+<body>
+    <input id="version" type="hidden" value="" />
+    <input type="hidden" id="needTitle" value="true" />
+
+    <header id="nav">
+    <input type="hidden" id="mPlusRtnUrl" value="?EncryptClientNo=" />
+        <div  class="nav_in">
+            <section id="headnav">
+
+            </section>
+            <section>
+                <span>{{title}}</span>
+            </section>
+
+            <section>
+                <div class="rightLogoIcon"></div>
+            </section>
+
+        </div>
+     </header>
+
+
+<form name="aspnetForm" method="post" action="{{action}}" id="aspnetForm">
+
+
+<section class="consection" id="secBaseInfo">
+    {% csrf_token %}
+    <div class="incondiv cardid" id="divName">
+        <span><i>* </i>姓名：</span>
+        <div> <input name="user" type="text" id="ctl00_ContentPlaceHolder1_txbName" maxlength="12" oninput="javascript:onChangeInput(this)" onblur="javascript:onTextBlur(this)" /><dt class="index-cross" id="cross_Name" onmousedown = "onTextClear(this)"  ></dt></div>
+    </div>
+    <div class="incondiv cardid">
+        <span><i>* </i>手机号：</span>
+        <div> <input name="phone_number" type="text" id="ctl00_ContentPlaceHolder1_tbxMobile" maxlength="11" pattern="[0-9]*" oninput="javascript:onChangeInput(this)" onblur="javascript:onTextBlur(this)"" /> <dt class="index-cross" id="cross_Tel" onmousedown = "onTextClear(this)"  ></dt></div>
+    </div>
+    <div class="incondiv cardtype">
+        <i style="color:#FFF;">* </i>验证码：</label>{{form.captcha}}
+    </div>
+</section>
+<section class="newapplybtn" style="margin-top:10px;">
+    <div class="bottombtn">
+        <div><input type="submit" name="ctl00$ContentPlaceHolder1$btnQuery" value="提交" onclick="javascript:return ChecePage();" id="ctl00_ContentPlaceHolder1_btnQuery" /></div>
+    </div>
+</section>
+</div>
+<div class="conmsg" id="errmsg" style="display:none;"><em>!</em></div>
+
+    <script type="text/javascript">
+    //检验短表单
+    function CheckShort_()
+    {
+        try {
+            if (typeof (EventTrack) == "function") EventTrack('/mca/CCA_Submit_btn.htm', '新户申请提交按钮');
+            if ("1" == $("hidisNew").value) {
+                Disabledbtn(); $("NotNewDiv").style.display = "-webkit-box";
+                if(""==""){ $("topconmsg").innerHTML = "<em>!</em>抱歉，您是已持卡客户，暂不能通过手机申请，请使用电脑登陆我行官网办理。"; }
+                else{ $("topconmsg").innerHTML = "<em>!</em>您已持有招行信用卡，无法参加推荐新户办卡活动；若您想加办卡片，请使用电脑登陆我行官网办理。"; }
+                return false;
+            }
+            var rtnobj = pChkUserName($("ctl00_ContentPlaceHolder1_txbName").value, 2, 6);
+            if (rtnobj.nRet != 1) { ShowErrmsg("请准确输入姓名，2-6个字。"); $("ctl00_ContentPlaceHolder1_txbName").style.border="solid 1px #E7333F"; return false; }
+            else{ $("ctl00_ContentPlaceHolder1_txbName").style.border="";}
+
+
+            rtnobj = pChkMobile($("ctl00_ContentPlaceHolder1_tbxMobile").value);
+            if (rtnobj.nRet != 1) { ShowErrmsg("请准确输入11位手机号码。"); $("ctl00_ContentPlaceHolder1_tbxMobile").style.border="solid 1px #E7333F";return false; }
+            else{ $("ctl00_ContentPlaceHolder1_tbxMobile").style.border="";}
+
+            $("ctl00_ContentPlaceHolder1_hidc").value = BCore.tools.Tools.getCookie('bfd_g');
+            sleep(200);
+            return true;
+            }catch(exc){ }
+
+    }
+    function ShowErrmsg(errmsg) {
+        $("errmsg").innerHTML = "<em>!</em>" + errmsg;
+        $("errmsg").style.display = "block";
+    }
+
+    // ajax 刷新
+    $('.captcha').click(function(){
+         $.getJSON("/captcha/refresh/",
+                  function(result){
+             $('.captcha').attr('src', result['image_url']);
+             $('#id_captcha_0').val(result['key'])
+          });
+    });
+
+    // ajax动态验证
+    $('#id_captcha_1').blur(function(){  // #id_captcha_1为输入框的id，当该输入框失去焦点是触发函数
+        json_data={
+            'response':$('#id_captcha_1').val(),  // 获取输入框和隐藏字段id_captcha_0的数值
+            'hashkey':$('#id_captcha_0').val()
+        }
+        $.getJSON("{% url 'ajax_val' %}", json_data, function(data){ //ajax发送
+            $('#captcha_status').remove()
+            if(data['status']){ //status返回1为验证码正确， status返回0为验证码错误， 在输入框的后面写入提示信息
+                $('#id_captcha_1').after('<span id="captcha_status" style="color:blue">*验证码正确</span>')
+            }else{
+                 $('#id_captcha_1').after('<span id="captcha_status" style="color:red">*验证码错误</span>')
+            }
+        });
+
+    });
+  });
+
+
+    </script>
+</body>
+</html>

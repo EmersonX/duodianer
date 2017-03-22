@@ -2,6 +2,8 @@
 CMBC_TASK_REDIRECT_URL = 'https://ccclub.cmbchina.com/mca/MPreContract.aspx?cardsel=8745&swbrief=y&WT.mc_id=N3700MM2061K793700YL'
 CEBBANK_TASK_REDIRECT_URL = 'https://xyk.cebbank.com/cebmms/apply/ps/card-list.htm?level=124&pro_code=FHTG060000SJ71SHYC'
 
+CMBC_SOURCE1_TASK_REDIRECT_URL = 'http://xyk.cmbchina.com/Latte/card/cardList?WT.mc_id=N3700MMA061J339700JL'
+CMBC_SOURCE2_TASK_REDIRECT_URL = 'http://xyk.cmbchina.com/Latte/card/cardList?WT.mc_id=N3700MMA061J341700JL'
 
 CMBC_TASK_EDUCATION = {
     "college_degree": "大专学历",

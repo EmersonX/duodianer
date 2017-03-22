@@ -2,7 +2,7 @@
 from django import forms
 from captcha.fields import CaptchaField
 
-from .models import CMBCTaskModel, CEBBANKTaskModel
+from .models import CMBCTaskModel, CEBBANKTaskModel, CMBCSource1TaskModel, CMBCSource2TaskModel
 
 class CMBCTaskForm(forms.ModelForm):
     captcha = CaptchaField()
@@ -37,4 +37,32 @@ class CEBBANKTaskForm(forms.ModelForm):
 
     class Meta:
         model = CEBBANKTaskModel
+        exclude = ['created', 'ip']
+
+
+class CMBCSource1TaskForm(forms.ModelForm):
+    captcha = CaptchaField()
+
+    def __init__(self, *args, **kwargs):
+        super(CMBCSource1TaskForm, self).__init__(*args, **kwargs)
+
+        self.fields['user'].required = True
+        self.fields['phone_number'].required = True
+
+    class Meta:
+        model = CMBCSource1TaskModel
+        exclude = ['created', 'ip']
+
+
+class CMBCSource2TaskForm(forms.ModelForm):
+    captcha = CaptchaField()
+
+    def __init__(self, *args, **kwargs):
+        super(CMBCSource2TaskForm, self).__init__(*args, **kwargs)
+
+        self.fields['user'].required = True
+        self.fields['phone_number'].required = True
+
+    class Meta:
+        model = CMBCSource2TaskModel
         exclude = ['created', 'ip']
