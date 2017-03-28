@@ -3,11 +3,12 @@ import json
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse, HttpResponseNotFound
 from captcha.models import CaptchaStore
 
-from .forms import CMBCTaskForm, CEBBANKTaskForm, CMBCSource1TaskForm, CMBCSource2TaskForm
-from .models import CommonDistrictModel
+from task.models import *
+from task.forms import *
 from utils.helper import get_client_ip
 from www.settings.const import (
     CMBC_TASK_REDIRECT_URL, CEBBANK_TASK_REDIRECT_URL,
@@ -105,3 +106,34 @@ def ajax_val(request):
         # raise Http404
         json_data = {'status':0}
         return JsonResponse(json_data)
+
+
+def custom_task(request):
+    task_id = request.GET.get('id')
+    try:
+        obj = CustomTaskModel.objects.get(id=task_id)
+    except CustomTaskModel.DoesNotExist:
+        return HttpResponseNotFound('<h1>Page not found</h1>')
+    else:
+        if request.method == 'POST':
+            form = TaskRegisterUserInfoForm(request.POST)
+            print form
+            if form.is_valid():
+                ip = get_client_ip(request)
+                form.instance.ip = ip
+                form.instance.task_type = obj
+                form.save()
+                return HttpResponseRedirect(obj.redirect_url)
+
+        form = TaskRegisterUserInfoForm()
+        provinces = CommonDistrictModel.get_districts_by_upid(0)
+        context = {
+            'title': obj.title,
+            'forms_setting': json.dumps(obj.forms_setting),
+            'redirect_url': obj.redirect_url,
+            'background_css': obj.background_css,
+            'form': form,
+            'provinces': provinces,
+            'action': '%s?id=%s' % (reverse('custom_task'), task_id)
+        }
+        return render_to_response('task/custom_task.html', context, context_instance=RequestContext(request))

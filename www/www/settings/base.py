@@ -26,7 +26,7 @@ SECRET_KEY = 'qle%njn!=7rzy9_92c(6#d))@7!iaqq0@)zly@_cw13e2q=w=@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 ADMIN_SITE_HEADER = "多点儿任务后台"
 
@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'task',
     'captcha',
-    'daterange_filter'
+    'daterange_filter',
+    'multiselectfield'
 ]
 
 MIDDLEWARE_CLASSES = [
