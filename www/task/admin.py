@@ -128,7 +128,8 @@ class TaskRegisterUserInfoAdmin(admin.ModelAdmin):
     download_selected_tasks.short_description = "下载所选的 信用卡注册任务"
 
     list_filter = ['task_type',]
-    list_display = ['id', 'real_name', 'user_name', 'province', 'city', 'district', 'identity', 'phone_number', 'task_type']
+    list_display = ['id', 'real_name', 'user_name', 'province', 'city', 'district',
+                    'identity', 'phone_number', 'ip', 'created', 'task_type']
 
 
 admin.site.register(CMBCTaskModel, CMBCTaskAdmin)
